@@ -1,0 +1,1228 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xsd:schema elementFormDefault="qualified" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="http://xml.microfocus.com/schema/appconfig/v1.0/mfappcfg.xsd"
+    xmlns="http://xml.microfocus.com/schema/appconfig/v1.0/mfappcfg.xsd">
+    <!--
+        ********************************************************************************
+        *   Schema for COBOL runtime configuration details.                            *
+        *                                                                              *
+        *   Used for generation and disassembly of runtime configuration blocks built  *
+        *   into IDT files, or GCF files.                                              *
+        ********************************************************************************
+    -->
+
+    <!--
+        *==============================================================================*
+        *   The (one and only) root element. Each of the child elements are optional   *
+        *   and may occur in any order. They are used to group the different types of  *
+        *   configuration details (e.g. tunables, environment variables, and switches).*
+        *==============================================================================*
+    -->
+
+    <xsd:element name="application_configuration">
+        <xsd:complexType>
+            <xsd:all>
+                <xsd:element name="envvars"    type="envvarsType"    minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="switches"   type="switchesType"   minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="tunables"   type="tunablesType"   minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="deployment" type="deploymentType" minOccurs="0" maxOccurs="1"/>
+            </xsd:all>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--
+        ********************************************************************************
+        *   Environment variables                                                      *
+        ********************************************************************************
+    -->
+
+    <!--
+        *==============================================================================*
+        *   Zero or many environment variables may be defined and in any order         *
+        *==============================================================================*
+    -->
+
+    <xsd:complexType name="envvarsType">
+        <xsd:sequence>
+            <xsd:element name="envvar" type="envvarType" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!--
+        *==============================================================================*
+        *   Environment variable attributes                                            *
+        *==============================================================================*
+    -->
+
+    <xsd:complexType name="envvarType">
+        <xsd:attribute name="name"  type="xsd:string" use="required"/>
+        <xsd:attribute name="value" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <!--
+        ********************************************************************************
+        *   Switches								        *
+        ********************************************************************************
+    -->
+
+    <!--
+        *==============================================================================*
+        *   Zero or many switches may be defined and in any order                      *
+        *==============================================================================*
+    -->
+
+    <xsd:complexType name="switchesType">
+      <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+        <xsd:choice>
+            <xsd:element name="cobol_switch" type="cobol_switch_Type" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="rts_switch"   type="rts_switch_Type"   minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:choice>
+      </xsd:sequence>
+    </xsd:complexType>
+
+    <!--
+        *==============================================================================*
+        *   Switch attributes                                                          *
+        *==============================================================================*
+    -->
+
+    <xsd:complexType name="cobol_switch_Type">
+        <xsd:attribute name="number" type="cobol_switch_NumberType" use="required"/>
+        <xsd:attribute name="value"  type="cobol_switch_ValueType" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="rts_switch_Type">
+        <xsd:attribute name="name"  type="rts_switch_NameType" use="required"/>
+        <xsd:attribute name="value" type="rts_switch_ValueType" use="required"/>
+        <xsd:attribute name="index" type="rts_switch_IndexType" default="0"/>
+    </xsd:complexType>
+
+    <!--
+        *==============================================================================*
+        *   Switch attribute value restrictions                                        *
+        *==============================================================================*
+    -->
+
+    <xsd:simpleType name="cobol_switch_NumberType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="63"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="cobol_switch_ValueType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="on"/>
+            <xsd:enumeration value="off"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="rts_switch_NameType">
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[A-Z]"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="rts_switch_ValueType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="on"/>
+            <xsd:enumeration value="off"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="rts_switch_IndexType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="7"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!--
+        ********************************************************************************
+        *   Tunables                                                                   *
+        ********************************************************************************
+    -->
+
+    <!--
+        *==============================================================================*
+        *   Zero or many tunables may be defined and in any order                      *
+        *==============================================================================*
+    -->
+
+    <xsd:complexType name="tunablesType">
+      <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+        <xsd:choice>
+          <xsd:element name="same_proc_excl_detection"
+			    type="same_proc_excl_detection_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="isam_open_key_check"
+			    type="isam_open_key_check_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="isam_block_size"
+			    type="isam_block_size_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="lock_mode"
+			    type="lock_mode_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="noretry_on_decl"
+			    type="noretry_on_decl_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="skip_on_lock"
+			    type="skip_on_lock_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="long_filenames"
+			    type="long_filenames_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="cobol_locking"
+			    type="cobol_locking_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="optimized_seeks"
+			    type="optimized_seeks_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="max_file_handles"
+			    type="max_file_handles_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="command_line_linkage"
+			    type="command_line_linkage_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="arguments_are_initial"
+			    type="arguments_are_initial_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="command_line_accept"
+			    type="command_line_accept_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="cobconfig_error_report"
+			    type="cobconfig_error_report_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="program_search_order"
+			    type="program_search_order_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="entry_point_mapper"
+			    type="entry_point_mapper_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="environment_mapper"
+			    type="environment_mapper_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="program_environment_mapper"
+			    type="program_environment_mapper_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="case_sensitivity"
+			    type="case_sensitivity_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="shared_memory_segment_size"
+			    type="shared_memory_segment_size_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="bll_cell_address_check"
+			    type="bll_cell_address_check_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="stack_size"
+			    type="stack_size_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="mfpm_logging"
+			    type="mfpm_logging_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="dynamic_dictionary_limit"
+			    type="dynamic_dictionary_limit_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="dynamic_memory_limit"
+			    type="dynamic_memory_limit_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="detect_alt_ctrl"
+			    type="detect_alt_ctrl_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="pc_mono_palette"
+			    type="pc_mono_palette_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="signal_interface"
+			    type="signal_interface_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="signal_regime"
+			    type="signal_regime_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="core_on_error"
+			    type="core_on_error_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="debug_on_error"
+			    type="debug_on_error_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="debugger_command"
+			    type="debugger_command_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="filename_quote_char"
+			    type="filename_quote_char_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="filename_escape_char"
+			    type="filename_escape_char_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="current_day"
+			    type="current_day_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="current_month"
+			    type="current_month_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="current_year"
+			    type="current_year_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="mvs_control_block_size"
+			    type="mvs_control_block_size_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="sort_memory"
+			    type="sort_memory_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="cobol_switch"
+			    type="cobol_switch_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="default_cancel_mode"
+			    type="default_cancel_mode_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="nulls_in_ls_files"
+			    type="nulls_in_ls_files_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="stable_sort"
+			    type="stable_sort_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="execute_error_int"
+			    type="execute_error_int_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="suppress_divide_by_zero"
+			    type="suppress_divide_by_zero_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="validate_numeric_fields"
+			    type="validate_numeric_fields_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="ansi_debug_switch"
+			    type="ansi_debug_switch_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="console_size"
+			    type="console_size_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="ansi_space_strip"
+			    type="ansi_space_strip_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="console_redirection"
+			    type="console_redirection_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="errors_to_stderr"
+			    type="errors_to_stderr_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="faultfind_level"
+			    type="faultfind_level_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="faultfind_outfile"
+			    type="faultfind_outfile_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="faultfind_recsize"
+			    type="faultfind_recsize_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="keisen_white"
+			    type="keisen_white_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="mfpm_access_cancelled_data"
+			    type="mfpm_access_cancelled_data_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="screen_attribute"
+			    type="screen_attribute_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="printer_redirection"
+			    type="printer_redirection_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="intra_process_record_locking"
+			    type="intra_process_record_locking_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="oc_compat_locking"
+			    type="oc_compat_locking_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="multi_close_limit"
+			    type="multi_close_limit_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="win9x_shiftlock_fix"
+			    type="win9x_shiftlock_fix_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="sync_network_file_time"
+			    type="sync_network_file_time_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="program_search_intgnt"
+			    type="program_search_intgnt_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="routine_table_size"
+			    type="routine_table_size_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="entry_name_mapper"
+			    type="entry_name_mapper_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="max_heaps"
+			    type="max_heaps_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="max_streams"
+			    type="max_streams_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="redir_stdin_is_recsq"
+			    type="redir_stdin_is_recsq_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="screen_lines"
+			    type="screen_lines_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="screen_cols"
+			    type="screen_cols_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="ansi_input_mode"
+			    type="ansi_input_mode_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="pipe_delay"
+			    type="pipe_delay_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="mainframe_floating_point"
+			    type="mainframe_floating_point_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="current_hour"
+			    type="current_hour_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="current_minute"
+			    type="current_minute_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="current_second"
+			    type="current_second_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="timewarp_dynamic"
+			    type="timewarp_dynamic_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="datewarp_dynamic"
+			    type="datewarp_dynamic_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="use_lock_wait"
+			    type="use_lock_wait_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="profile_behavior"
+			    type="profile_behavior_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="entry_point_mapper_search_order"
+			    type="entry_point_mapper_search_order_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="memory_strategy"
+			    type="memory_strategy_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="memory_free_check_size"
+			    type="memory_free_check_size_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="faultfind_config"
+			    type="faultfind_config_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="mfpm_external_data31"
+			    type="mfpm_external_data31_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="no_mfredir"
+			    type="no_mfredir_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="entry_point_mapper_alias_exists_error"
+			    type="entry_point_mapper_alias_exists_error_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="os_error_log"
+			    type="os_error_log_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="remote_64bit_access"
+			    type="remote_64bit_access_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="error_on_duplicate_entry_point"
+			    type="error_on_duplicate_entry_point_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="ansi_screen_handling"
+			    type="ansi_screen_handling_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="device_name_detection"
+			    type="device_name_detection_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="pipe_buffer_size"
+			    type="pipe_buffer_size_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="use_mfextmap_migration_tool"
+			    type="use_mfextmap_migration_tool_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="faultfind_cache_enable"
+			    type="faultfind_cache_enable_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="core_filename"
+			    type="core_filename_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="acu_library"
+			    type="acu_library_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="acu_user_library"
+			    type="acu_user_library_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="subsystem_cancel_mode"
+			    type="subsystem_cancel_mode_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="strict_file_locking"
+			    type="strict_file_locking_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="acu_rm_library_routines"
+			    type="acu_rm_library_routines_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="core_on_signal"
+			    type="core_on_signal_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="reduce_java_signals"
+			    type="reduce_java_signals_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="putenv_interface"
+			    type="putenv_interface_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="max_signal_threads"
+			    type="max_signal_threads_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="dbcs_text_enable_clip"
+			    type="dbcs_text_enable_clip_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="stackdump_on_error"
+			    type="stackdump_on_error_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="stackdump_filename"
+			    type="stackdump_filename_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="entry_point_mapper_disable_auto_aliasing"
+			    type="entry_point_mapper_disable_auto_aliasing_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="stackdump_on_signal"
+			    type="stackdump_on_signal_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="thread_model"
+			    type="thread_model_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="entry_point_mapper_invalid_path_error"
+			    type="entry_point_mapper_invalid_path_error_TunableType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:choice>
+      </xsd:sequence>
+    </xsd:complexType>
+
+    <!--
+        *==============================================================================*
+        *   Tunable attributes                                                         *
+        *==============================================================================*
+    -->
+
+    <xsd:complexType name="same_proc_excl_detection_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="isam_open_key_check_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="isam_block_size_TunableType">
+        <xsd:attribute name="value" type="isam_block_size_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="lock_mode_TunableType">
+        <xsd:attribute name="value" type="lock_mode_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="noretry_on_decl_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="skip_on_lock_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="long_filenames_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="cobol_locking_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="optimized_seeks_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="max_file_handles_TunableType">
+        <xsd:attribute name="value" type="max_file_handles_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="command_line_linkage_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="arguments_are_initial_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="command_line_accept_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="cobconfig_error_report_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="program_search_order_TunableType">
+        <xsd:attribute name="value" type="program_search_order_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="entry_point_mapper_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="environment_mapper_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="program_environment_mapper_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="case_sensitivity_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="shared_memory_segment_size_TunableType">
+        <xsd:attribute name="value" type="shared_memory_segment_size_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="bll_cell_address_check_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="stack_size_TunableType">
+        <xsd:attribute name="value" type="stack_size_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="mfpm_logging_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+        <xsd:attribute name="index" type="mfpm_logging_TunableIndexType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="dynamic_dictionary_limit_TunableType">
+        <xsd:attribute name="value" type="dynamic_dictionary_limit_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="dynamic_memory_limit_TunableType">
+        <xsd:attribute name="value" type="dynamic_memory_limit_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="detect_alt_ctrl_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="pc_mono_palette_TunableType">
+        <xsd:attribute name="value" type="pc_mono_palette_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="signal_interface_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="signal_regime_TunableType">
+        <xsd:attribute name="value" type="signal_regime_TunableValueType" use="required"/>
+        <xsd:attribute name="index" type="signal_regime_TunableIndexType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="core_on_error_TunableType">
+        <xsd:attribute name="value" type="core_on_error_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="debug_on_error_TunableType">
+        <xsd:attribute name="value" type="debug_on_error_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="debugger_command_TunableType">
+        <xsd:attribute name="value" type="xsd:string" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="filename_quote_char_TunableType">
+        <xsd:attribute name="value" type="filename_quote_char_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="filename_escape_char_TunableType">
+        <xsd:attribute name="value" type="filename_escape_char_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="current_day_TunableType">
+        <xsd:attribute name="value" type="current_day_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="current_month_TunableType">
+        <xsd:attribute name="value" type="current_month_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="current_year_TunableType">
+        <xsd:attribute name="value" type="current_year_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="mvs_control_block_size_TunableType">
+        <xsd:attribute name="value" type="mvs_control_block_size_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="sort_memory_TunableType">
+        <xsd:attribute name="value" type="sort_memory_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="cobol_switch_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+        <xsd:attribute name="index" type="cobol_switch_TunableIndexType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="default_cancel_mode_TunableType">
+        <xsd:attribute name="value" type="default_cancel_mode_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="nulls_in_ls_files_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="stable_sort_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="execute_error_int_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="suppress_divide_by_zero_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="validate_numeric_fields_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="ansi_debug_switch_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="console_size_TunableType">
+        <xsd:attribute name="value" type="console_size_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="ansi_space_strip_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="console_redirection_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="errors_to_stderr_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="faultfind_level_TunableType">
+        <xsd:attribute name="value" type="faultfind_level_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="faultfind_outfile_TunableType">
+        <xsd:attribute name="value" type="xsd:string" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="faultfind_recsize_TunableType">
+        <xsd:attribute name="value" type="faultfind_recsize_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="keisen_white_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="mfpm_access_cancelled_data_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="screen_attribute_TunableType">
+        <xsd:attribute name="value" type="screen_attribute_TunableValueType" use="required"/>
+        <xsd:attribute name="index" type="screen_attribute_TunableIndexType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="printer_redirection_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="intra_process_record_locking_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="oc_compat_locking_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="multi_close_limit_TunableType">
+        <xsd:attribute name="value" type="multi_close_limit_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="win9x_shiftlock_fix_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="sync_network_file_time_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="program_search_intgnt_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="routine_table_size_TunableType">
+        <xsd:attribute name="value" type="routine_table_size_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="entry_name_mapper_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="max_heaps_TunableType">
+        <xsd:attribute name="value" type="max_heaps_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="max_streams_TunableType">
+        <xsd:attribute name="value" type="max_streams_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="redir_stdin_is_recsq_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="screen_lines_TunableType">
+        <xsd:attribute name="value" type="screen_lines_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="screen_cols_TunableType">
+        <xsd:attribute name="value" type="screen_cols_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="ansi_input_mode_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="pipe_delay_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="mainframe_floating_point_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="current_hour_TunableType">
+        <xsd:attribute name="value" type="current_hour_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="current_minute_TunableType">
+        <xsd:attribute name="value" type="current_minute_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="current_second_TunableType">
+        <xsd:attribute name="value" type="current_second_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="timewarp_dynamic_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="datewarp_dynamic_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="use_lock_wait_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="profile_behavior_TunableType">
+        <xsd:attribute name="value" type="profile_behavior_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="entry_point_mapper_search_order_TunableType">
+        <xsd:attribute name="value" type="entry_point_mapper_search_order_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="memory_strategy_TunableType">
+        <xsd:attribute name="value" type="memory_strategy_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="memory_free_check_size_TunableType">
+        <xsd:attribute name="value" type="memory_free_check_size_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="faultfind_config_TunableType">
+        <xsd:attribute name="value" type="faultfind_config_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="mfpm_external_data31_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="no_mfredir_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="entry_point_mapper_alias_exists_error_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="os_error_log_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="remote_64bit_access_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="error_on_duplicate_entry_point_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="ansi_screen_handling_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="device_name_detection_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="pipe_buffer_size_TunableType">
+        <xsd:attribute name="value" type="pipe_buffer_size_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="use_mfextmap_migration_tool_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="faultfind_cache_enable_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="core_filename_TunableType">
+        <xsd:attribute name="value" type="xsd:string" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="acu_library_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="acu_user_library_TunableType">
+        <xsd:attribute name="value" type="xsd:string" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="subsystem_cancel_mode_TunableType">
+        <xsd:attribute name="value" type="subsystem_cancel_mode_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="strict_file_locking_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="acu_rm_library_routines_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="core_on_signal_TunableType">
+        <xsd:attribute name="value" type="core_on_signal_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="reduce_java_signals_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="putenv_interface_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="max_signal_threads_TunableType">
+        <xsd:attribute name="value" type="max_signal_threads_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="dbcs_text_enable_clip_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="stackdump_on_error_TunableType">
+        <xsd:attribute name="value" type="stackdump_on_error_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="stackdump_filename_TunableType">
+        <xsd:attribute name="value" type="xsd:string" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="entry_point_mapper_disable_auto_aliasing_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="stackdump_on_signal_TunableType">
+        <xsd:attribute name="value" type="stackdump_on_signal_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="thread_model_TunableType">
+        <xsd:attribute name="value" type="thread_model_TunableValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="entry_point_mapper_invalid_path_error_TunableType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+
+    <!--
+        *==============================================================================*
+        *   Tunable attribute value restrictions                                       *
+        *==============================================================================*
+    -->
+
+    <xsd:simpleType name="isam_block_size_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="512"/>
+            <xsd:maxInclusive value="4096"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="lock_mode_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="4"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="max_file_handles_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="20"/>
+            <xsd:maxInclusive value="65535"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="program_search_order_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="1"/>
+            <xsd:maxInclusive value="4"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="shared_memory_segment_size_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="8192"/>
+            <xsd:maxInclusive value="4294967295"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="stack_size_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="2147483647"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="mfpm_logging_TunableIndexType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="2"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="dynamic_dictionary_limit_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="2147483647"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="dynamic_memory_limit_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="2147483647"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="pc_mono_palette_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="1"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="signal_regime_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="2"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="signal_regime_TunableIndexType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="22"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="core_on_error_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="4294967295"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="debug_on_error_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="4294967295"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="filename_quote_char_TunableValueType">
+        <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="1"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="filename_escape_char_TunableValueType">
+        <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="1"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="current_day_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="1"/>
+            <xsd:maxInclusive value="31"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="current_month_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="1"/>
+            <xsd:maxInclusive value="12"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="current_year_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="1900"/>
+            <xsd:maxInclusive value="2147483647"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="mvs_control_block_size_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="2147483647"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="sort_memory_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="2147483647"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="cobol_switch_TunableIndexType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="63"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="default_cancel_mode_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="2"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="console_size_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="2"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="faultfind_level_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="100000"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="faultfind_recsize_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="1024"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="screen_attribute_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="128"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="screen_attribute_TunableIndexType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="6"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="multi_close_limit_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="1500"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="routine_table_size_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="65535"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="max_heaps_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="65535"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="max_streams_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="65535"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="screen_lines_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="255"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="screen_cols_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="255"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="current_hour_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="23"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="current_minute_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="59"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="current_second_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="59"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="profile_behavior_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="3"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="entry_point_mapper_search_order_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="1"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="memory_strategy_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="4294967295"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="memory_free_check_size_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="1"/>
+            <xsd:maxInclusive value="2147483647"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="faultfind_config_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="1024"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="pipe_buffer_size_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="2147483647"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="subsystem_cancel_mode_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="2"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="core_on_signal_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="2147483647"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="max_signal_threads_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="15"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="stackdump_on_error_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="1"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="stackdump_on_signal_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="2147483647"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="thread_model_TunableValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="1"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!--
+        ********************************************************************************
+        *   Deployment                                                                 *
+        ********************************************************************************
+    -->
+
+    <!--
+        *==============================================================================*
+        *   Zero or many deployment settings may be defined and in any order           *
+        *==============================================================================*
+    -->
+
+    <xsd:complexType name="deploymentType">
+      <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+        <xsd:choice>
+          <xsd:element name="reuse_container"
+			    type="reuse_container_DeploymentType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="max_success_code"
+			    type="max_success_code_DeploymentType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="max_success_code_enabled"
+			    type="max_success_code_enabled_DeploymentType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="app_always_exits"
+			    type="app_always_exits_DeploymentType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="reuse_container_after_error"
+			    type="reuse_container_after_error_DeploymentType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="application_returns_http_status"
+			    type="application_returns_http_status_DeploymentType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="output_filtering_enabled"
+			    type="output_filtering_enabled_DeploymentType"
+			    minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:choice>
+      </xsd:sequence>
+    </xsd:complexType>
+
+    <!--
+        *==============================================================================*
+        *   Deployment variable attributes                                             *
+        *==============================================================================*
+    -->
+
+    <xsd:complexType name="reuse_container_DeploymentType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="max_success_code_DeploymentType">
+        <xsd:attribute name="value" type="max_success_code_DeploymentValueType" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="max_success_code_enabled_DeploymentType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="app_always_exits_DeploymentType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="reuse_container_after_error_DeploymentType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="application_returns_http_status_DeploymentType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="output_filtering_enabled_DeploymentType">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+
+    <!--
+        *==============================================================================*
+        *   Deployment variable attribute value restrictions                           *
+        *==============================================================================*
+    -->
+
+    <xsd:simpleType name="max_success_code_DeploymentValueType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxInclusive value="2147483647"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+</xsd:schema>

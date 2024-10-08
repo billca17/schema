@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- (c) Copyright 2022 Micro Focus or one of its affiliates. -->
+<xs:schema 
+elementFormDefault="qualified"
+xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:element name="service" type="serviceType" />
+
+	<xs:complexType name="serviceType">
+		<xs:sequence>
+			<xs:element name="properties" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="property" type="propertyType" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="workFields" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="workField" type="workFieldType" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!-- define reusable parameters here -->
+			<xs:element name="parameterTypeDefs" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="parameter" type="parameterType" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="operations" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="operation" type="operationType" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="programName" type="xs:string" use="required" />
+		<xs:attribute name="implementation" type="implementationEnum" use="required" />
+		<xs:attribute name="dataDictFilename" type="xs:string" use="required" />
+		<xs:attribute name="exitProgramName" type="xs:string"/>
+		<xs:attribute name="generateTrace" type="xs:boolean" default="false"/>
+		<xs:attribute name="traceQueue" type="xs:string"/>
+		<xs:attribute name="facilityLikeName" type="xs:string"/>
+		<xs:attribute name="facilityKeepTime" type="xs:integer" default="0"/>
+		<xs:attribute name="waitIntervalTime" type="xs:integer" default="0"/>
+		<xs:attribute name="restartRecovery" type="xs:boolean" default="false"/>
+		<xs:attribute name="backoutProcessPath" type="xs:string"/>
+		<xs:attribute name="mvsPhysicalFileName" type="xs:string"/>
+		<xs:attribute name="genASCII" type="xs:boolean" default="false"/>
+		<xs:attribute name="commareaBased" type="xs:boolean" default="false"/>
+		<xs:attribute name="channelBased" type="xs:boolean" default="false"/>
+		<xs:attribute name="hostTransactionType" type="hostTransactionTypeEnum" />
+		<xs:attribute name="IMSGroupName" type="xs:string"/>
+		<xs:attribute name="IMSServerName" type="xs:string"/>
+
+	</xs:complexType>
+	
+	<xs:complexType name="propertyType">
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" />
+	</xs:complexType>
+	
+	<xs:complexType name="operationType">
+		<xs:sequence>
+			<xs:element name="inConditions" type="conditionsType" minOccurs="0" maxOccurs="1" />
+			<xs:element name="outConditions" type="conditionsType" minOccurs="0" maxOccurs="1" />
+	
+			<xs:element name="hiddenParameters">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="hiddenParameter" type="hiddenParameterType" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+	
+			<xs:element name="parameters">
+				<xs:complexType>
+					<xs:sequence>
+						<!-- usage -->
+						<xs:element name="parameter" type="parameterType" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+		</xs:sequence>
+
+		<xs:attribute name="entryPoint" type="xs:string" use="required" />
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="exitPoints" type="xs:unsignedInt" default="0"/>
+		<xs:attribute name="accessType" type="xs:integer" default="0"/>
+		<!--xs:attribute name="cursorItem" type="xs:string" /-->
+		<!--xs:attribute name="aidKey" type="aidKeyEnum" /-->
+		<xs:attribute name="tranId" type="xs:string" />
+		<xs:attribute name="programName" type="xs:string" />
+		<xs:attribute name="previousMap" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="hiddenParameterType">
+		<xs:sequence>
+			<xs:element name="expression" type="expressionType" minOccurs="0" maxOccurs="1" />
+			<!--xs:element name="condition" type="conditionType" minOccurs="0" maxOccurs="1" /-->
+		</xs:sequence>
+		<xs:attribute name="item" type="xs:string" use="required" />
+		<xs:attribute name="value" type="xs:string" />
+		<xs:attribute name="conditionRef" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="parameterType">
+		<xs:complexContent>
+			<xs:extension base="fieldType">
+				<xs:attribute name="byType" type="directionEnum" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="fieldType">
+		<xs:sequence>
+			<xs:element name="mappings" type="mappingsType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="field" type="fieldType" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="ref" type="xs:string" /> <!-- ignored within <parameterTypes> -->
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="occurs" type="xs:integer" default="0" />
+		<xs:attribute name="length" type="xs:integer" default="0" />
+		<xs:attribute name="mappingsRoot" type="xs:string" />
+		<xs:attribute name="mappingsRootPointer" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="mappingsType">
+		<xs:sequence>
+			<xs:element name="mapping" type="mappingType" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="mappingType">
+			<!--xs:sequence>
+				<xs:element name="condition" type="conditionType" minOccurs="0" maxOccurs="1" />
+			</xs:sequence-->
+            <xs:attribute name="value" type="xs:string" />               <!-- stores a constant or literal rather than a mapping -->
+            <xs:attribute name="item" type="itemType" />                 <!-- dataitem we're mapping to including subscripts -->
+            <xs:attribute name="subscript" type="subscriptType"/>    <!-- subscript of the interface parameter -->
+		    <xs:attribute name="conditionRef" type="xs:string" />
+	</xs:complexType>
+
+	<xs:simpleType name="itemType">
+            <xs:restriction base="xs:string">
+	<!--	<xs:pattern value="[\-0-9a-zA-Z]+(.[\-0-9a-zA-Z]+)*(\(([0-9]+|\*)(,([0-9]+|\*))*\))?"/> --><!--  a.b.c(1,2,*,4) for example no spaces -->
+            </xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="subscriptType">
+            <xs:restriction base="xs:string">
+		<!--<xs:pattern value="([0-9]+|\*)(,([0-9]+|\*))*"/>--> <!-- "1,23,*,4" for example no spaces -->
+            </xs:restriction>
+	</xs:simpleType>          
+
+	<xs:simpleType name="directionEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="in" />
+			<xs:enumeration value="out" />
+			<xs:enumeration value="io" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="implementationEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="com" />
+			<xs:enumeration value="ws" />
+			<xs:enumeration value="java" />
+			<xs:enumeration value="xml"/>
+			<xs:enumeration value="dotnet"/>
+			<xs:enumeration value="rest"/>
+      		<xs:enumeration value="cws" />
+      		<xs:enumeration value="cwsjson" />
+			<xs:enumeration value="cwsrest" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="specialItemEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="$command_line" />
+			<xs:enumeration value="$return_code" />
+			<xs:enumeration value="$stdin" />
+			<xs:enumeration value="$stdout" />
+			<xs:enumeration value="$user_id" />
+			<xs:enumeration value="$password" />
+			<xs:enumeration value="$abend_code" />
+			<xs:enumeration value="$status" />
+			<xs:enumeration value="$message" />
+			<xs:enumeration value="$aid" />
+			<xs:enumeration value="$cursor_pos" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="hostTransactionTypeEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CICS" />
+			<xs:enumeration value="IMS" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="workFieldType">
+		<xs:sequence>
+			<xs:element name="workField" type="workFieldType" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="occurs" type="xs:integer" default="0" />
+		<xs:attribute name="length" type="xs:integer" default="0" />
+		<xs:attribute name="type" type="workFieldTypeEnum" />
+		<xs:attribute name="decimalDigits" type="xs:integer" default="0" />
+		<xs:attribute name="sign" type="xs:boolean" default="false" />
+	</xs:complexType>
+	<xs:simpleType name="aidKeyEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ENTER" />
+			<xs:enumeration value="CLEAR" />
+			<xs:enumeration value="PA1" />
+			<xs:enumeration value="PA2" />
+			<xs:enumeration value="PA3" />
+			<xs:enumeration value="PF1" />
+			<xs:enumeration value="PF2" />
+			<xs:enumeration value="PF3" />
+			<xs:enumeration value="PF4" />
+			<xs:enumeration value="PF5" />
+			<xs:enumeration value="PF6" />
+			<xs:enumeration value="PF7" />
+			<xs:enumeration value="PF8" />
+			<xs:enumeration value="PF9" />
+			<xs:enumeration value="PF10" />
+			<xs:enumeration value="PF11" />
+			<xs:enumeration value="PF12" />
+			<xs:enumeration value="PF13" />
+			<xs:enumeration value="PF14" />
+			<xs:enumeration value="PF15" />
+			<xs:enumeration value="PF16" />
+			<xs:enumeration value="PF17" />
+			<xs:enumeration value="PF18" />
+			<xs:enumeration value="PF19" />
+			<xs:enumeration value="PF20" />
+			<xs:enumeration value="PF21" />
+			<xs:enumeration value="PF22" />
+			<xs:enumeration value="PF23" />
+			<xs:enumeration value="PF24" />
+			<xs:enumeration value="OPID" />
+			<xs:enumeration value="MSRE" />
+			<xs:enumeration value="TRIG" />
+			<xs:enumeration value="PEN" />
+			<xs:enumeration value="CLRP" />
+			<xs:enumeration value="STRF" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="conditionType">
+		<xs:sequence>
+			<xs:element name="expression" type="expressionType" minOccurs="1" maxOccurs="1" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+	</xs:complexType>
+	<xs:complexType name="expressionType">
+		<xs:sequence>
+			<xs:element name="expression" type="expressionType" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="type" type="expressionTypeEnum" use="required" />
+		<xs:attribute name="item" type="xs:string" />
+		<xs:attribute name="value" type="xs:string" />
+	</xs:complexType>
+	<xs:simpleType name="expressionTypeEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="VALUE" />
+			<xs:enumeration value="AND" />
+			<xs:enumeration value="OR" />
+			<xs:enumeration value="NOT" />
+			<xs:enumeration value="EQ" />
+			<xs:enumeration value="NE" />
+			<xs:enumeration value="GT" />
+			<xs:enumeration value="LT" />
+			<xs:enumeration value="GTE" />
+			<xs:enumeration value="LTE" />
+			<xs:enumeration value="ADD" />
+			<xs:enumeration value="SUBTRACT" />
+			<xs:enumeration value="MULTIPLY" />
+			<xs:enumeration value="DIVIDE" />
+			<xs:enumeration value="SUM" />
+			<xs:enumeration value="SUBSTRING" />
+			<xs:enumeration value="CONCAT" />
+			<xs:enumeration value="ATTRIBUTE" />
+			<xs:enumeration value="COLOR" />
+			<xs:enumeration value="HILIGHT" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="specialMapEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="$empty_map" />
+			<xs:enumeration value="$text_sent" />
+			<xs:enumeration value="$any_map" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="specialTranidEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="$screen_def" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="workFieldTypeEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="numeric" />
+			<xs:enumeration value="alphanumeric" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="conditionsType">
+		<xs:sequence>
+			<xs:element name="condition" type="conditionType" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

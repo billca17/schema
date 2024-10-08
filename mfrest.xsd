@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- (c) Copyright 2022 Micro Focus or one of its affiliates. -->
+<schema elementFormDefault="qualified" 
+        xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://xml.microfocus.com/schema/rest/v1.0/mfrest.xsd" 
+        xmlns:tns="http://xml.microfocus.com/schema/rest/v1.0/mfrest.xsd">
+
+   <redefine schemaLocation="http://xml.microfocus.com/schema/service/v2.0/mfservice.xsd">
+
+      <complexType name="serviceType">
+         <complexContent>
+            <extension base="tns:serviceType">
+            </extension>
+         </complexContent>
+      </complexType>
+
+      <complexType name="operationType">
+         <complexContent>
+            <extension base="tns:operationType">
+               <sequence>
+                  <element name="fault" minOccurs="0" maxOccurs="unbounded">
+                     <complexType>
+                        <sequence>
+                           <element name="parameters">
+                              <complexType>
+                                 <sequence>
+                                    <element name="parameter" type="tns:parameterType" minOccurs="0" maxOccurs="unbounded" />
+                                 </sequence>
+                              </complexType>
+                           </element>
+                        </sequence>
+                        <attribute name="name" type="string"/>
+                     </complexType>
+                  </element>
+               </sequence>
+               <attribute name="httpMethod" type="string" default="POST"/>
+               <attribute name="path" type="string"/>
+            </extension>
+         </complexContent>
+      </complexType>
+
+      <complexType name="fieldType">
+         <complexContent>
+             <extension base="tns:fieldType">
+                 <attribute name="dataType" type="tns:dataTypeEnum"/>
+             </extension>
+         </complexContent>
+      </complexType>
+
+      <complexType name="parameterType">
+         <complexContent>
+             <extension base="tns:parameterType">
+                 <attribute name="in" type="tns:inEnum"/>
+                 <attribute name="mediaType" type="string"/>
+             </extension>
+         </complexContent>
+      </complexType>
+
+   </redefine>
+
+   <simpleType name="dataTypeEnum">
+      <restriction base="string">
+         <enumeration value="string" />
+         <enumeration value="number" />
+         <enumeration value="integer" />
+         <enumeration value="link" />
+		 <enumeration value="boolean" />
+      </restriction>
+   </simpleType>
+
+   <simpleType name="inEnum">
+      <restriction base="string">
+         <enumeration value="body" />
+         <enumeration value="query" />
+         <enumeration value="path" />
+         <enumeration value="header" />
+         <enumeration value="cookie" />
+      </restriction>
+   </simpleType>
+
+</schema>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- (c) Copyright 2022 Micro Focus or one of its affiliates. -->
+<schema elementFormDefault="qualified" 
+        xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://xml.microfocus.com/schema/dotnet/v1.0/mfdotnet.xsd"
+        xmlns:tns="http://xml.microfocus.com/schema/dotnet/v1.0/mfdotnet.xsd">
+
+	<redefine schemaLocation="http://xml.microfocus.com/schema/service/v2.0/mfservice.xsd">
+
+		<complexType name="fieldType">
+			<complexContent>
+				<extension base="tns:fieldType">
+					<attribute name="dataType" type="tns:dataTypeEnum" />
+				</extension>
+			</complexContent>
+		</complexType>
+
+	</redefine>
+
+	<simpleType name="dataTypeEnum">
+		<restriction base="string">
+			<enumeration value="Byte" />
+			<enumeration value="SByte" />
+			<enumeration value="Int16" />
+			<enumeration value="Int32" />
+			<enumeration value="Int64" />
+			<enumeration value="UInt16" />
+			<enumeration value="UInt32" />
+			<enumeration value="UInt64" />
+			<enumeration value="Single" />
+			<enumeration value="Double" />
+			<enumeration value="Decimal" />
+			<enumeration value="String" />
+		</restriction>
+	</simpleType>
+
+</schema>

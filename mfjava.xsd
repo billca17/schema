@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Copyright 2022 Micro Focus or one of its affiliates. -->
+<schema elementFormDefault="qualified"
+        xmlns="http://www.w3.org/2001/XMLSchema" 
+        targetNamespace="http://xml.microfocus.com/schema/java/v2.0/mfjava.xsd" 
+        xmlns:tns="http://xml.microfocus.com/schema/java/v2.0/mfjava.xsd">
+
+	<redefine schemaLocation="http://xml.microfocus.com/schema/service/v2.0/mfservice.xsd">	
+		
+		<complexType name="serviceType">
+			<complexContent>
+				<extension base="tns:serviceType">
+					<attribute name="package" type="string" use="optional"/> 
+				</extension>
+			</complexContent>
+		</complexType>
+
+		<complexType name="operationType">
+			<complexContent>
+				<extension base="tns:operationType">
+					<attribute name="transactionType" type="tns:transactionTypeEnum" default="notSupported"/>
+
+				</extension>
+			</complexContent>
+		</complexType>
+
+		<complexType name="fieldType">
+			<complexContent>
+				<extension base="tns:fieldType">
+					<attribute name="dataType" type="tns:dataTypeEnum"/>
+					<attribute name="defaultValue" type="string"/>
+				</extension>
+			</complexContent>
+		</complexType>
+
+	</redefine>
+
+	<simpleType name="transactionTypeEnum">
+		<restriction base="string">
+				 <enumeration value="notSupported" /> 
+				   <enumeration value="mandatory" /> 
+				   <enumeration value="never" /> 
+				   <enumeration value="requires" /> 
+				   <enumeration value="requiresNew" /> 
+				   <enumeration value="supports" /> 
+		</restriction>
+	</simpleType>
+	
+	<simpleType name="dataTypeEnum">
+		<restriction base="string">
+			 <enumeration value="byte" /> 
+			 <enumeration value="short" /> 
+			 <enumeration value="int" /> 
+			 <enumeration value="long" /> 
+			 <enumeration value="float" /> 
+			 <enumeration value="double" /> 
+			 <enumeration value="BigInteger" /> 
+			 <enumeration value="BigDecimal" /> 
+			 <enumeration value="String" /> 
+			 <enumeration value="byteArray"/>
+		</restriction>
+	</simpleType>
+
+</schema>

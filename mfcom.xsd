@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- (c) Copyright 2022 Micro Focus or one of its affiliates. -->
+<schema elementFormDefault="qualified" 
+        xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://xml.microfocus.com/schema/com/v1.0/mfcom.xsd"
+        xmlns:tns="http://xml.microfocus.com/schema/com/v1.0/mfcom.xsd">
+
+	<redefine schemaLocation="http://xml.microfocus.com/schema/service/v2.0/mfservice.xsd">
+
+		<complexType name="parameterType">
+			<complexContent>
+				<extension base="tns:parameterType">
+					<attribute name="returnParameter" type="boolean" default="false" />
+				</extension>
+			</complexContent>
+		</complexType>
+
+		<complexType name="fieldType">
+			<complexContent>
+				<extension base="tns:fieldType">
+					<attribute name="dataType" type="tns:dataTypeEnum" />
+				</extension>
+			</complexContent>
+		</complexType>
+
+	</redefine>
+
+	<simpleType name="dataTypeEnum">
+		<restriction base="string">
+			<enumeration value="byte" />
+			<enumeration value="short" />
+			<enumeration value="int" />
+			<enumeration value="long" />
+			<enumeration value="float" />
+			<enumeration value="double" />
+			<enumeration value="currency" />
+			<enumeration value="string" />
+			<enumeration value="date" />
+			<enumeration value="object" />
+		</restriction>
+	</simpleType>
+
+</schema>

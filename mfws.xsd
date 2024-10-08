@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- (c) Copyright 2022 Micro Focus or one of its affiliates. -->
+<schema elementFormDefault="qualified" 
+        xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://xml.microfocus.com/schema/ws/v1.0/mfws.xsd" 
+        xmlns:tns="http://xml.microfocus.com/schema/ws/v1.0/mfws.xsd">
+
+	<redefine schemaLocation="http://xml.microfocus.com/schema/service/v2.0/mfservice.xsd">
+
+		<complexType name="serviceType">
+			<complexContent>
+				<extension base="tns:serviceType">
+				</extension>
+			</complexContent>
+		</complexType>
+
+		<complexType name="operationType">
+			<complexContent>
+				<extension base="tns:operationType">
+					<sequence>
+						<element name="header" minOccurs="0" maxOccurs="unbounded">
+							<complexType>
+								<sequence>
+									<element name="parameters">
+										<complexType>
+											<sequence>
+												<element name="parameter" type="tns:parameterType" minOccurs="0" maxOccurs="unbounded" />
+											</sequence>
+										</complexType>
+									</element>
+								</sequence>
+								<attribute name="byType" type="tns:directionEnum" use="required" />
+								<attribute name="use" type="tns:useEnum" />
+								<attribute name="namespace" type="string" />
+							</complexType>
+						</element>
+						<element name="fault" minOccurs="0" maxOccurs="unbounded">
+							<complexType>
+								<sequence>
+									<element name="parameters">
+										<complexType>
+											<sequence>
+												<element name="parameter" type="tns:parameterType" minOccurs="0" maxOccurs="unbounded" />
+											</sequence>
+										</complexType>
+									</element>
+								</sequence>
+								<attribute name="use" type="tns:useEnum" />
+								<attribute name="namespace" type="string" />
+							</complexType>
+						</element>
+					</sequence>
+					<attribute name="style" type="tns:styleEnum" />
+					<attribute name="inputUse" type="tns:useEnum" />
+					<attribute name="inputNamespace" type="string" />
+					<attribute name="outputUse" type="tns:useEnum" />
+					<attribute name="outputNamespace" type="string" />
+				</extension>
+			</complexContent>
+		</complexType>
+
+		<complexType name="parameterType">
+			<complexContent>
+				<extension base="tns:parameterType">
+					<attribute name="namespace" type="string" />
+					<attribute name="elementForm" type="tns:formEnum" />
+					<attribute name="attributeForm" type="tns:formEnum" />
+				</extension>
+			</complexContent>
+		</complexType>
+
+		<complexType name="fieldType">
+			<complexContent>
+				<extension base="tns:fieldType">
+					<sequence>
+						<element name="fieldAttribute" minOccurs="0" maxOccurs="unbounded">
+							<complexType>
+								<complexContent>
+									<restriction base="tns:fieldType">
+										<sequence>
+											<element name="mappings" type="tns:mappingsType" minOccurs="0" maxOccurs="1"/>
+										</sequence>
+										<attribute name="occurs" type="integer" fixed="0" />
+									</restriction>
+								</complexContent>
+							</complexType>
+						</element>
+					</sequence>
+					<attribute name="dataType" type="tns:dataTypeEnum" />
+					<attribute name="whiteSpace" type="tns:whiteSpaceEnum" />
+				</extension>
+			</complexContent>
+		</complexType>
+
+	</redefine>
+
+	<simpleType name="dataTypeEnum">
+		<restriction base="string">
+			<enumeration value="byte" /> 
+			<enumeration value="unsignedByte" /> 
+			<enumeration value="short" /> 
+			<enumeration value="unsignedShort" /> 
+			<enumeration value="int" /> 
+			<enumeration value="unsignedInt" /> 
+			<enumeration value="long" /> 
+			<enumeration value="unsignedLong" /> 
+			<enumeration value="float" /> 
+			<enumeration value="double" /> 
+			<enumeration value="decimal" /> 
+			<enumeration value="integer" /> 
+			<enumeration value="string" /> 
+			<enumeration value="Array" /> 
+			<enumeration value="XML" /> 
+		</restriction>
+	</simpleType>
+
+	<simpleType name="styleEnum">
+		<restriction base="string">
+			<enumeration value="rpc" /> 
+			<enumeration value="document" /> 
+		</restriction>
+	</simpleType>
+
+	<simpleType name="useEnum">
+		<restriction base="string">
+			<enumeration value="literal" /> 
+			<enumeration value="encoded" /> 
+		</restriction>
+	</simpleType>
+
+	<simpleType name="formEnum">
+		<restriction base="string">
+			<enumeration value="qualified" /> 
+			<enumeration value="unqualified" /> 
+		</restriction>
+	</simpleType>
+
+	<simpleType name="whiteSpaceEnum">
+		<restriction base="string">
+			<enumeration value="preserve" /> 
+			<enumeration value="replace" /> 
+			<enumeration value="collapse" /> 
+		</restriction>
+	</simpleType>
+
+</schema>

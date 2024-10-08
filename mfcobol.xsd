@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- (c) Copyright 2022 Micro Focus or one of its affiliates. -->
+<xsd:schema elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xml.microfocus.com/schema/cobol/v2.0/mfcobol.xsd" xmlns="http://xml.microfocus.com/schema/cobol/v2.0/mfcobol.xsd">
+	<xsd:element name="program" type="programType" />
+	<xsd:complexType name="programType">
+		<xsd:sequence>
+			<xsd:element name="properties" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="property" type="propertyType" minOccurs="1" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="fileSection" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="fd" type="fdType" minOccurs="1" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="dataItems" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:group ref="dataItemTypes" minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="entryPoints" minOccurs="1">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="entryPoint" type="entryPointType" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" />
+	</xsd:complexType>
+	<xsd:complexType name="fdType">
+		<xsd:sequence>
+			<xsd:element name="dataItems" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:group ref="dataItemTypes" minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" />
+		<xsd:attribute name="accessMode" use="required">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="random" />
+					<xsd:enumeration value="sequential" />
+					<xsd:enumeration value="dynamic" />
+					<xsd:enumeration value="" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="organization" use="required">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="sequential" />
+					<xsd:enumeration value="lineSequential" />
+					<xsd:enumeration value="relative" />
+					<xsd:enumeration value="indexed" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="propertyType">
+		<xsd:attribute name="name" type="xsd:string" use="required" />
+		<xsd:attribute name="value" type="xsd:string" />
+	</xsd:complexType>
+	<xsd:group name="dataItemTypes">
+		<xsd:choice>
+			<xsd:element name="group" type="groupType" />
+			<xsd:element name="numeric" type="numericType" />
+			<xsd:element name="alphanumeric" type="alphanumericType" />
+			<xsd:element name="alphanumericEdited" type="alphanumericEditedType" />
+			<xsd:element name="numericEdited" type="numericEditedType" />
+			<xsd:element name="pointer" type="pointerType" />
+			<xsd:element name="national" type="nationalType" />
+			<xsd:element name="cobolObject" type="objectType" />
+			<xsd:element name="index" type="indexType" />
+			<xsd:element name="nationalNumeric" type="nationalNumericType" />
+			<xsd:element name="nationalNumericEdited" type="numericEditedType" />
+			<xsd:element name="utf8" type="utf8Type" />
+		</xsd:choice>
+	</xsd:group>
+	<xsd:complexType name="groupType">
+		<xsd:sequence>
+			<xsd:element name="alphanumericCondition" type="alphanumericConditionType" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="group" type="groupType" />
+				<xsd:element name="numeric" type="numericType" />
+				<xsd:element name="alphanumeric" type="alphanumericType" />
+				<xsd:element name="alphanumericEdited" type="alphanumericEditedType" />
+				<xsd:element name="numericEdited" type="numericEditedType" />
+				<xsd:element name="pointer" type="pointerType" />
+				<xsd:element name="national" type="nationalType" />
+				<xsd:element name="cobolObject" type="objectType" />
+				<xsd:element name="index" type="indexType" />
+				<xsd:element name="nationalNumeric" type="nationalNumericType" />
+				<xsd:element name="nationalNumericEdited" type="numericEditedType" />
+				<xsd:element name="utf8" type="utf8Type" />
+			</xsd:choice>
+		</xsd:sequence>
+		<xsd:attributeGroup ref="dataItemAttrGroup" />
+	</xsd:complexType>
+	<xsd:complexType name="numericType">
+		<xsd:sequence>
+			<xsd:element name="numericCondition" type="numericConditionType" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="usage" use="required">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="comp" />
+					<xsd:enumeration value="comp-1" />
+					<xsd:enumeration value="comp-2" />
+					<xsd:enumeration value="comp-3" />
+					<xsd:enumeration value="comp-4" />
+					<xsd:enumeration value="comp-5" />
+					<xsd:enumeration value="comp-6" />
+					<xsd:enumeration value="comp-x" />
+					<xsd:enumeration value="display" />
+					<xsd:enumeration value="externalFloat" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="sign">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="true" />
+					<xsd:enumeration value="li" />
+					<xsd:enumeration value="ls" />
+					<xsd:enumeration value="ti" />
+					<xsd:enumeration value="ts" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="digits" type="xsd:integer" use="required" />
+		<xsd:attribute name="alignment" type="xsd:integer" default="0" />
+		<xsd:attributeGroup ref="dataItemAttrGroup" />
+	</xsd:complexType>
+	<xsd:complexType name="alphanumericType">
+		<xsd:sequence>
+			<xsd:element name="alphanumericCondition" type="alphanumericConditionType" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="justified" default="left">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="left" />
+					<xsd:enumeration value="right" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="hexBinary" type="xsd:boolean" default="false" />
+		<xsd:attributeGroup ref="dataItemAttrGroup" />
+	</xsd:complexType>
+	<xsd:complexType name="alphanumericEditedType">
+		<xsd:sequence>
+			<xsd:element name="alphanumericCondition" type="alphanumericConditionType" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attributeGroup ref="dataItemAttrGroup" />
+	</xsd:complexType>
+	<xsd:complexType name="numericEditedType">
+		<xsd:sequence>
+			<xsd:element name="alphanumericCondition" type="alphanumericConditionType" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="digits" type="xsd:integer" use="required" />
+		<xsd:attribute name="blankWhenZero" type="xsd:boolean" default="false" />
+		<xsd:attribute name="alignment" type="xsd:integer" default="0" />
+		<xsd:attribute name="sign" type="xsd:boolean" default="false" />
+		<xsd:attributeGroup ref="dataItemAttrGroup" />
+	</xsd:complexType>
+	<xsd:complexType name="pointerType">
+		<xsd:attributeGroup ref="dataItemAttrGroup" />
+		<xsd:attribute name="nullConditionValue" />
+	</xsd:complexType>
+	<xsd:complexType name="nationalType">
+		<xsd:attributeGroup ref="dataItemAttrGroup" />
+		<xsd:attribute name="usage" use="required">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="dbcs" />
+					<xsd:enumeration value="unicode" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="utf8Type">
+		<xsd:attributeGroup ref="dataItemAttrGroup" />
+		<xsd:attribute name="byteLength" type="xsd:boolean" default="false" />
+	</xsd:complexType>
+	<xsd:complexType name="objectType">
+		<xsd:attributeGroup ref="dataItemAttrGroup" />
+	</xsd:complexType>
+	<xsd:complexType name="indexType">
+		<xsd:attributeGroup ref="dataItemAttrGroup" />
+	</xsd:complexType>
+	<xsd:complexType name="nationalNumericType">
+		<xsd:sequence>
+			<xsd:element name="numericCondition" type="numericConditionType" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="usage">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="externalFloat" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="sign">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="true" />
+					<xsd:enumeration value="li" />
+					<xsd:enumeration value="ls" />
+					<xsd:enumeration value="ti" />
+					<xsd:enumeration value="ts" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="digits" type="xsd:integer" use="required" />
+		<xsd:attribute name="alignment" type="xsd:integer" default="0" />
+		<xsd:attributeGroup ref="dataItemAttrGroup" />
+	</xsd:complexType>
+	<xsd:complexType name="numericConditionType">
+		<xsd:choice maxOccurs="unbounded">
+			<xsd:element name="numericConstant">
+				<xsd:complexType>
+					<xsd:attribute name="value" type="xsd:string" />
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="numericRange">
+				<xsd:complexType>
+					<xsd:attribute name="from" type="xsd:string" />
+					<xsd:attribute name="to" type="xsd:string" />
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+		<xsd:attribute name="name" type="xsd:string" use="required" />
+	</xsd:complexType>
+	<xsd:complexType name="alphanumericConditionType">
+		<xsd:choice maxOccurs="unbounded">
+			<xsd:element name="alphanumericConstant">
+				<xsd:complexType>
+					<xsd:attribute name="value" type="xsd:string" />
+					<xsd:attribute name="isFalse" />
+					<xsd:attribute name="all" />
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="alphanumericRange">
+				<xsd:complexType>
+					<xsd:attribute name="from" type="xsd:string" />
+					<xsd:attribute name="to" type="xsd:string" />
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+		<xsd:attribute name="name" type="xsd:string" use="required" />
+	</xsd:complexType>
+	<xsd:attributeGroup name="dataItemAttrGroup">
+		<xsd:attribute name="picture" type="xsd:string" />
+		<xsd:attribute name="name" type="xsd:string" use="required" />
+		<xsd:attribute name="linkage" type="xsd:boolean" default="true" />
+		<xsd:attribute name="length" type="xsd:integer" use="required" />
+		<xsd:attribute name="minOccurs" type="xsd:integer" default="0" />
+		<xsd:attribute name="maxOccurs" type="xsd:integer" default="0" />
+		<xsd:attribute name="stride" type="xsd:integer" />
+		<xsd:attribute name="odo" type="xsd:string" />
+		<xsd:attribute name="offset" type="xsd:integer" default="0" />
+		<xsd:attribute name="sync" type="xsd:boolean" default="false" />
+		<xsd:attribute name="redefines" type="xsd:boolean" default="false" />
+		<xsd:attribute name="renames" type="xsd:boolean" default="false" />
+		<xsd:attribute name="line" type="xsd:integer" />
+	</xsd:attributeGroup>
+	<xsd:complexType name="entryPointType">
+		<xsd:sequence>
+			<xsd:element name="parameter" type="parameterType" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" use="required" />
+		<xsd:attribute name="line" type="xsd:integer" use="required" />
+		<xsd:attribute name="callConvention" type="xsd:integer" default="0" />
+	</xsd:complexType>
+	<xsd:complexType name="parameterType">
+		<xsd:attribute name="dataItem" type="xsd:string" use="required" />
+		<xsd:attribute name="byType" default="reference">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="reference" />
+					<xsd:enumeration value="value" />
+					<xsd:enumeration value="returning" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:simpleType name="figurativeConstantValuesEnum">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="$high-values" />
+			<xsd:enumeration value="$low-values" />
+			<xsd:enumeration value="$null" />
+			<xsd:enumeration value="$quotes" />
+			<xsd:enumeration value="$spaces" />
+			<xsd:enumeration value="$zero" />
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

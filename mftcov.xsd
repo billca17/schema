@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright © 2016 Micro Focus. All rights reserved. .-->
+<xsd:schema elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xml.microfocus.com/schema/tcov/v1.0/mftcov.xsd" xmlns="http://xml.microfocus.com/schema/tcov/v1.0/mftcov.xsd">
+    <xsd:element name="testCoverage" type="testCoverageType" />
+   
+    <xsd:complexType name="testCoverageType">
+	<xsd:sequence>
+	    <xsd:element name="resultsFileName" type="xsd:string"/>
+	    <xsd:element name="machineName" type="xsd:string"/>
+	    <xsd:element name="programCoverage">
+		<xsd:complexType>
+		    <xsd:sequence>
+			<xsd:element name="totalLines" type="xsd:nonNegativeInteger"/>
+			<xsd:element name="totalLinesCovered" type="xsd:nonNegativeInteger"/>
+			<xsd:element name="totalLinesCoveredPercent" type="xsd:decimal"/>
+			<xsd:element name="totalBlocks" type="xsd:nonNegativeInteger"/>
+			<xsd:element name="totalBlocksCovered" type="xsd:nonNegativeInteger"/>
+			<xsd:element name="totalBlocksCoveredPercent" type="xsd:decimal"/>
+			<xsd:element name="program" type="programType" minOccurs="1" maxOccurs="unbounded" />
+		    </xsd:sequence>
+		</xsd:complexType>
+	    </xsd:element>
+	    <xsd:element name="sourceFileCoverage" minOccurs="1" maxOccurs="unbounded">
+		<xsd:complexType>
+		    <xsd:sequence>
+			<xsd:element name="sourceFile" type="sourceFileType" minOccurs="1" maxOccurs="unbounded" />
+		    </xsd:sequence>
+		</xsd:complexType>
+	    </xsd:element>
+	</xsd:sequence>
+    </xsd:complexType>
+  
+    <xsd:complexType name="programType">
+	<xsd:sequence>
+	    <xsd:element name="lines" type="xsd:nonNegativeInteger"/>
+	    <xsd:element name="linesCovered" type="xsd:nonNegativeInteger"/>
+	    <xsd:element name="linesCoveredPercent" type="xsd:decimal"/>
+	    <xsd:element name="blocks" type="xsd:nonNegativeInteger"/>
+	    <xsd:element name="blocksCovered" type="xsd:nonNegativeInteger"/>
+	    <xsd:element name="blocksCoveredPercent" type="xsd:decimal"/>
+	    <xsd:element name="sectionCount" type="xsd:nonNegativeInteger"/>
+	    <xsd:element name="paragraphCount" type="xsd:nonNegativeInteger"/>
+	    <xsd:element name="sourceFiles" type="sourceFilesType"/>
+	</xsd:sequence>
+	<xsd:attribute name="name" type="xsd:string" use="required"/>
+    </xsd:complexType>
+  
+    <xsd:complexType name="sourceFilesType">
+	<xsd:sequence>
+	    <xsd:element name="sourceFile" type="sourceFileType" minOccurs="0" maxOccurs="unbounded"/>
+	</xsd:sequence>
+    </xsd:complexType>
+  
+    <xsd:complexType name="sourceFileType">
+	<xsd:sequence>
+	    <xsd:element name="location" type="xsd:string" minOccurs="0"/>
+	    <xsd:element name="lines" type="xsd:nonNegativeInteger"/>
+	    <xsd:element name="linesCovered" type="xsd:nonNegativeInteger"/>
+	    <xsd:element name="linesCoveredPercent" type="xsd:decimal"/>
+	    <xsd:element name="blocks" type="xsd:nonNegativeInteger"/>
+	    <xsd:element name="blocksCovered" type="xsd:nonNegativeInteger"/>
+	    <xsd:element name="blocksCoveredPercent" type="xsd:decimal"/>
+	</xsd:sequence>
+	<xsd:attribute name="name" type="xsd:string" use="required"/>
+	<xsd:attribute name="copyfile" type="xsd:boolean" default="false"/>
+    </xsd:complexType>
+</xsd:schema>

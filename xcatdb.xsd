@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+   <element name="r-CAT-DB">
+      <complexType>
+         <sequence>
+            <element name="r-CAT-COMPOSITE-REC" maxOccurs="unbounded">
+               <complexType>
+                  <sequence>
+                     <element name="R-CAT-REC" maxOccurs="unbounded">
+                        <complexType>
+                           <sequence>
+                              <element name="R-DSN" maxOccurs="unbounded">
+                                 <complexType>
+                                    <sequence>
+                                       <element name="R-DSNAME">
+                                          <simpleType>
+                                             <restriction base="string">
+                                                <maxLength value="44"/>
+                                             </restriction>
+                                          </simpleType>
+                                       </element>
+                                       <element name="R-MEMBER">
+                                          <simpleType>
+                                             <restriction base="string">
+                                                <maxLength value="8"/>
+                                             </restriction>
+                                          </simpleType>
+                                       </element>
+                                    </sequence>
+                                 </complexType>
+                              </element>
+                              <element name="R-PC-DSN">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="260"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-CATALOGED">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="1"/>
+                                       <enumeration value="S"/>
+                                       <enumeration value="1"/>
+                                       <enumeration value="0"/>
+                                       <enumeration value="D"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-VOLUME">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="6"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-RECFM">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="4"/>
+                                       <enumeration value="KS"/>
+                                       <enumeration value="ES"/>
+                                       <enumeration value="LS"/>
+                                       <enumeration value="RR"/>
+                                       <enumeration value="F"/>
+                                       <enumeration value="FA"/>
+                                       <enumeration value="FB"/>
+                                       <enumeration value="FBA"/>
+                                       <enumeration value="FBM"/>
+                                       <enumeration value="FBS"/>
+                                       <enumeration value="FM"/>
+                                       <enumeration value="FS"/>
+                                       <enumeration value="LSEQ"/>
+                                       <enumeration value="U"/>
+                                       <enumeration value="V"/>
+                                       <enumeration value="VA"/>
+                                       <enumeration value="VB"/>
+                                       <enumeration value="VBA"/>
+                                       <enumeration value="VBM"/>
+                                       <enumeration value="VBS"/>
+                                       <enumeration value="VM"/>
+                                       <enumeration value="VS"/>
+                                       <enumeration value="?"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-DSORG">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="4"/>
+                                       <enumeration value="PDSM"/>
+                                       <enumeration value="PO"/>
+                                       <enumeration value="PS"/>
+                                       <enumeration value="VSAM"/>
+                                       <enumeration value="GDG"/>
+                                       <enumeration value="IS"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-CHARSET">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="1"/>
+                                       <enumeration value="E"/>
+                                       <enumeration value="A"/>
+                                       <enumeration value="?"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-EXPDT">
+                                 <simpleType>
+                                    <restriction base="integer">
+                                       <totalDigits value="8"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-SPACE-UNIT">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="4"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-CREATE-DATE">
+                                 <simpleType>
+                                    <restriction base="integer">
+                                       <totalDigits value="8"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-CHG-DATE">
+                                 <simpleType>
+                                    <restriction base="integer">
+                                       <totalDigits value="8"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-CHG-TIME">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="8"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-UNIT-DEVICE">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <totalDigits value="8"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-COMPILE-TIME">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="8"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-DEFAULT-EXT">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="3"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-JOB-CREATED">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="8"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-JOB-USED">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="8"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-TIME-CREATED">
+                                 <simpleType>
+                                    <restriction base="integer">
+                                       <totalDigits value="8"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-GDG-MAX">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="4"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-EXTENDED-TYPE">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="1"/>
+                                       <enumeration value="C"/>
+                                       <enumeration value="I"/>
+                                       <enumeration value="D"/>
+                                       <enumeration value="A"/>
+                                       <enumeration value="P"/>
+                                       <enumeration value="M"/>
+                                       <enumeration value=" "/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-LOCK-USERID">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="8"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-VSAM-REU">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="1"/>
+                                       <enumeration value="1"/>
+                                       <enumeration value="0"/>
+                                       <enumeration value=" "/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-VSAM-AIX-UNQK">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="1"/>
+                                       <enumeration value="1"/>
+                                       <enumeration value="0"/>
+                                       <enumeration value=" "/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-FILE-FORMAT">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="1"/>
+                                       <enumeration value="0"/>
+                                       <enumeration value="4"/>
+                                       <enumeration value="8"/>
+                                       <enumeration value="0"/>
+                                       <enumeration value="4"/>
+                                       <enumeration value="8"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-RETURN-REL-PATH">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="1"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-XRBA">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="1"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-DSNTYPE">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="2"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-PCFILE-STATE">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="2"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-GDG-EMPTY-COUNT">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="4"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-VSAM-KEY-OFFSET">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="9"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-VSAM-KEY-LENGTH">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="9"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-GDG-ROLL-DISP">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="9"/>
+                                       <enumeration value="1"/>
+                                       <enumeration value="0"/>
+                                       <enumeration value="2"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-STRUCT-OFFSET">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="9"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-STRUCT-LEN">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="9"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-DATACLAS">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="8"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-BLKSIZE">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="4"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-SPACE-DIR-BLKS">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="4"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-SPACE-INIT-UNITS">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="4"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-SPACE-EXTENT-UNITS">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="4"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-VERSION">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="4"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-SCCS-TYPE">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="4"/>
+                                       <enumeration value="1"/>
+                                       <enumeration value="2"/>
+                                       <enumeration value="3"/>
+                                       <enumeration value="4"/>
+                                       <enumeration value="5"/>
+                                       <enumeration value="6"/>
+                                       <enumeration value="7"/>
+                                       <enumeration value="8"/>
+                                       <enumeration value="9"/>
+                                       <enumeration value="10"/>
+                                       <enumeration value="11"/>
+                                       <enumeration value="49"/>
+                                       <enumeration value="98"/>
+                                       <enumeration value="99"/>
+                                       <enumeration value="100"/>
+                                       <enumeration value="356"/>
+                                       <enumeration value="400"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-LRECL">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="4"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-LRECL-MAX">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="4"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-LRECL-MIN">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="4"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-VAR-LEN">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="4"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                           </sequence>
+                        </complexType>
+                     </element>
+                     <element name="R-SUB-RECORDS" maxOccurs="unbounded">
+                        <complexType>
+                           <sequence>
+                              <element name="R-PDS-EXT-CNT">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="4"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-DYN-PDS-EXT" minOccurs="0" maxOccurs="3330">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="3"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-STR-FILENAME">
+                                 <simpleType>
+                                    <restriction base="string">
+                                       <maxLength value="265"/>
+                                    </restriction>
+                                 </simpleType>
+                              </element>
+                              <element name="R-ASSOCIATIONS">
+                                <complexType>
+                                    <sequence>
+                                         <element name="R-ASSOC-CATALOG">
+                                           <simpleType>
+                                             <restriction base="string">
+                                               <maxLength value="44"/>
+                                             </restriction>
+                                           </simpleType>
+                                         </element>
+                                         <element name="R-ASSOC-LIST-SIZE">
+                                            <simpleType>
+                                                <restriction base="string">
+                                                    <maxLength value="4"/>
+                                                </restriction>
+                                            </simpleType>
+                                         </element>
+                                         <element name="R-ASSOCIATION" minOccurs="0" maxOccurs="100">
+                                           <complexType>
+                                             <sequence>
+                                               <element name="R-ASSOC-TYPE">
+                                                 <simpleType>
+                                                   <restriction base="string">
+                                                     <maxLength value="4"/>
+                                                   </restriction>
+                                                 </simpleType>
+                                               </element>
+                                               <element name="R-ASSOC-DSNAME">
+                                                 <simpleType>
+                                                   <restriction base="string">
+                                                     <maxLength value="44"/>
+                                                   </restriction>
+                                                 </simpleType>
+                                                </element>
+                                             </sequence>
+                                           </complexType>
+                                         </element>
+                                    </sequence>
+                                </complexType>
+                             </element>
+                             <element name="R-GDG-ASSOCIATIONS">
+                                <complexType>
+                                    <sequence>
+                                       <element name="R-GDG-ASSOC-LIST-SIZE">
+                                          <simpleType>
+                                             <restriction base="string">
+                                                <maxLength value="4"/>
+                                             </restriction>
+                                          </simpleType>
+                                       </element>
+                                       <element name="R-GDG-ASSOCIATION" minOccurs="0" maxOccurs="999">
+                                         <complexType>
+                                            <sequence>
+                                               <element name="R-GDG-ASSOC-IDX">
+                                                 <simpleType>
+                                                   <restriction base="string">
+                                                     <maxLength value="4"/>
+                                                   </restriction>
+                                                 </simpleType>
+                                               </element>
+                                            </sequence>
+                                         </complexType>
+                                        </element>
+                                    </sequence>
+                                </complexType>
+                            </element>
+                          </sequence>
+                        </complexType>
+                     </element>
+                  </sequence>
+               </complexType>
+            </element>
+         </sequence>
+      </complexType>
+   </element>
+</schema>
